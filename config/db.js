@@ -1,14 +1,22 @@
 import mongoose from 'mongoose';
 import config from 'config';
+import dotenv from 'dotenv';
 
-const db = config.get('mongoURL');
+// Load environment variables
+dotenv.config();
 
+// Get the connection string from environment variables or config
+const db = process.env.MONGO_URI || config.get('mongoURL');
+
+// Connect to MongoDB
 const connectDatabase = async () => {
     try {
         await mongoose.connect(db);
-        console.log('connected to MongoDB');
+        console.log('Connected to MongoDB');
     } catch (error) {
         console.error(error.message);
+
+        // Exit with failure code
         process.exit(1);
     }
 };
