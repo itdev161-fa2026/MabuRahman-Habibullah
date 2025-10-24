@@ -72,6 +72,46 @@ app.get("/api/posts/:id", async (req, res) => {
  * @route   POST api/posts
  * @desc    Create a post
  */
+ */
+app.get("/api/posts", async (req, res) => {
+  try {
+    const posts = await Post.find()
+      .populate("user", "name")
+      .sort({ createDate: -1 });
+
+    res.json(posts);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server error");
+  }
+});
+
+/**
+ * @route   GET api/posts/:id
+ * @desc    Get single post
+ */
+app.get("/api/posts/:id", async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.id).populate("user", "name");
+
+    if (!post) {
+      return res.status(404).json({ msg: "Post not found" });
+    }
+
+    res.json(post);
+  } catch (error) {
+    console.error(error.message);
+    if (error.kind === "ObjectId") {
+      return res.status(404).json({ msg: "Post not found" });
+    }
+    res.status(500).send("Server error");
+  }
+});
+
+/**
+ * @route   POST api/posts
+ * @desc    Create a post
+ */
 app.post(
   "/api/posts",
   [
@@ -122,6 +162,36 @@ app.put(
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const { title, body } = req.body;
+
+      const post = await Post.findById(req.params.id);
+
+      if (!post) {
+        return res.status(404).json({ msg: "Post not found" });
+      }
+
+      // Check if user owns the post
+      if (post.user.toString() !== req.user.id) {
+        return res.status(401).json({ msg: "User not authorized" });
+      }
+
+      post.title = title;
+      post.body = body;
+
+      await post.save();
+      await post.populate("user", "name");
+
+      res.json(post);
+    } catch (error) {
+      console.error(error.message);
+      if (error.kind === "ObjectId") {
+        return res.status(404).json({ msg: "Post not found" });
+      }
+      res.status(500).send("Server error");
+    }
     }
 
     try {
