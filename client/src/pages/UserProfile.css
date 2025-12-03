@@ -1,0 +1,57 @@
+.profile-container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.profile-header {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.profile-info h1 {
+    margin: 0;
+}
+
+.profile-joined {
+    color: #6b7280;
+    margin-top: 6px;
+}
+
+.edit-profile-link {
+    margin-left: auto;
+}
+
+.edit-profile-link a {
+    padding: 8px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    text-decoration: none;
+    color: #333;
+    transition: all 0.2s ease;
+}
+
+.edit-profile-link a:hover {
+    background-color: #f3f3f3;
+}
+
+.profile-about {
+    margin-bottom: 20px;
+}
+
+.profile-posts .posts-grid {
+    display: grid;
+    gap: 12px;
+}
+
+.error-msg {
+    padding: 16px;
+    color: crimson;
+}
+
+.not-found-msg {
+    padding: 16px;
+    color: #333;
+}

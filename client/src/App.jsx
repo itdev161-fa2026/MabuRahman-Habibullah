@@ -9,6 +9,8 @@ import LoginPage from './pages/LoginPage';
 import CreatePost from './pages/CreatePost';
 import EditPost from './pages/EditPost';
 import './App.css';
+import UserProfilePage from './pages/UserProfile';
+import EditProfile from './pages/EditProfile';
 
 function App() {
   return (
@@ -23,6 +25,8 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/posts/create" element={<ProtectedRoute><CreatePost /></ProtectedRoute>}/>
             <Route path="/posts/:id/edit" element={<ProtectedRoute><EditPost /></ProtectedRoute>}/>
+            <Route path="/users/:userId" element={<UserProfilePage />} />
+            <Route path="/users/:userId/edit" element={<EditProfile />} />
           </Routes>
         </div>
       </Router>

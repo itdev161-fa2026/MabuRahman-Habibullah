@@ -1,6 +1,7 @@
 import { useContext } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../context/authContext';
+import Avatar from './Avatar';
+import { AuthContext } from '../context/AuthContext';
 import './Header.css';
 
 const Header = () => {
@@ -22,7 +23,11 @@ const Header = () => {
           </Link>
           {user ? (
             <>
-              <span className="user-welcome">Hello, {user.name || 'User'}</span>
+              <Link to={`/users/${user.id}`} className="user-link">
+                <Avatar src={user.avatarUrl} name={user.name} size={32} />
+                <span>{user.name}</span>
+              </Link>
+              {/* Add Logout Button */}
               <button onClick={handleLogout} className="nav-button">
                 Logout
               </button>

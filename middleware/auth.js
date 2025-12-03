@@ -2,7 +2,6 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
-// Load environment variables
 dotenv.config();
 
 const auth = (req, res, next) => {
@@ -18,8 +17,7 @@ const auth = (req, res, next) => {
     // Verify token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Add user from payload to request object
-    req.user = decoded.user;
+    req.user = decoded.user; 
     next();
   } catch (error) {
     res.status(401).json({ msg: "Token is not valid" });
