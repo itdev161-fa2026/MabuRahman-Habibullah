@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { registerUser as registerUserAPI, loginUser as loginUserAPI } from '../services/api';
-import { AuthContext } from './authContext';
+import { AuthContext } from './AuthContext';
 
 // AuthProvider component to wrap the app
 export const AuthProvider = ({ children }) => {

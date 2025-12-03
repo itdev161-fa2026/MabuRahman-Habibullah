@@ -153,9 +153,17 @@ app.post('/api/auth', [
 */
 app.get("/api/posts", async (req, res) => {
     try {
-        const posts = await Post.find()
-        .populate("user", "name")
-        .sort({ createDate: -1 });
+        const filter = {};
+
+        // If ?user=userId is passed in URL, filter by that user
+        if (req.query.user) {
+            filter.user = req.query.user;
+        }
+
+        const posts = await Post.find(filter)
+            .populate("user", "name avatarUrl")
+            .sort({ createdAt: -1 });
+
         res.json(posts);
     } catch (error) {
         console.error(error.message);
@@ -298,6 +306,77 @@ app.delete("/api/posts/:id", auth, async (req, res) => {
             return res.status(404).json({ msg: "Post not found" });
         }
         res.status(500).send("Server error");
+    }
+});
+
+/**
+ * @route PUT /api/users/profile
+ * @desc Update user profile (bio + avatarUrl)
+ * @access Private
+ */
+app.put(
+    "/api/users/profile",
+    [
+    auth, // Must be logged in
+    check("bio", "Bio cannot exceed 500 characters").isLength({ max: 500 }),
+    ],
+    async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+        const { bio, avatarUrl } = req.body;
+
+      // Find logged-in user
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+        return res.status(404).json({ msg: "User not found" });
+        }
+
+      // Update fields (only if provided)
+        if (bio !== undefined) user.bio = bio;
+        if (avatarUrl !== undefined) user.avatarUrl = avatarUrl;
+
+    await user.save();
+
+        res.json({
+        msg: "Profile updated successfully",
+        user: {
+            id: user.id,
+            name: user.name,
+            email: user.email,
+            bio: user.bio,
+            avatarUrl: user.avatarUrl,
+        },
+        });
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server error");
+    }
+    }
+);
+
+/**
+ * @route GET /api/users/:id
+ * @desc Get user profile by ID
+ * @access Public
+ */
+app.get('/api/users/:id', async (req, res) => {
+    try {
+    const user = await User.findById(req.params.id).select('-password'); // exclude password
+    if (!user) {
+        return res.status(404).json({ msg: 'User not found' });
+    }
+    res.json(user);
+    } catch (err) {
+    console.error(err.message);
+    if (err.kind === 'ObjectId') {
+        return res.status(404).json({ msg: 'User not found' });
+    }
+    res.status(500).send('Server error');
     }
 });
 

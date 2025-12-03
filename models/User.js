@@ -2,20 +2,33 @@ import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
     name: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
     email: {
-        type: String,
-        required: true,
-        unique: true
+      type: String,
+      required: true,
+      unique: true,
     },
     password: {
-        type: String,
-        required: true
-    }
-});
+      type: String,
+      required: true,
+    },
 
-const User = mongoose.model('user', UserSchema);
+    // --- PROFILE FIELDS ---
+    bio: {
+      type: String,
+      maxlength: 500,
+      default: "",
+    },
+    avatarUrl: {
+      type: String,
+      default: "",
+    },
+  },
+  { timestamps: true }
+);
+
+const User = mongoose.model('User', UserSchema);
 
 export default User;

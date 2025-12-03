@@ -109,3 +109,36 @@ export const deletePost = async (id) => {
     throw error;
   }
 };
+
+// Get a user's profile by ID
+export const getUserProfile = async (userId) => {
+  try {
+    const response = await api.get(`/users/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
+};
+
+// Update the logged-in user's profile
+export const updateUserProfile = async (bio, avatarUrl) => {
+  try {
+    const response = await api.put('/users/profile', { bio, avatarUrl });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    throw error;
+  }
+};
+
+// Get posts by a specific user
+export const getPostsByUser = async (userId) => {
+  try {
+    const response = await api.get(`/posts?user=${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching user posts:', error);
+    throw error;
+  }
+};

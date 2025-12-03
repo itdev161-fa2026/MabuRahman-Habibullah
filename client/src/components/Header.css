@@ -63,3 +63,17 @@
     background-color: white;
     color: #282c34;
 }
+
+.user-link {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s;
+}
+
+.user-link:hover {
+    color: #61dafb;
+}

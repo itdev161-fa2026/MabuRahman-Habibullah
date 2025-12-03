@@ -1,0 +1,15 @@
+.avatar-img {
+    display: inline-block;
+    border-radius: 50%;
+}
+
+.avatar-fallback {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    background: #6b7280;
+    /* gray */
+    color: white;
+    text-transform: uppercase;
+}
